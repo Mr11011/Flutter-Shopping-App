@@ -2,8 +2,12 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shoppingapp/homepage/home_page.dart';
 import 'package:shoppingapp/login/cubit/bloc.dart';
 import 'package:shoppingapp/login/cubit/states.dart';
+import 'package:shoppingapp/login/login_model.dart';
+import 'package:shoppingapp/network/cache_helper.dart';
 import 'package:shoppingapp/register/register_screen.dart';
 import 'package:shoppingapp/reusabaleComponents.dart';
 
@@ -89,7 +93,8 @@ class loginPage extends StatelessWidget {
                                 labelText: "Password",
                                 hoverColor: Colors.lightBlue,
                                 suffixIcon: IconButton(
-                                  icon: Icon(loginCubit.get(context).suffixIcon),
+                                  icon:
+                                      Icon(loginCubit.get(context).suffixIcon),
                                   // Correct usage of the icon parameter
                                   onPressed: () {
                                     loginCubit.get(context).changeVisibility();
@@ -116,6 +121,14 @@ class loginPage extends StatelessWidget {
                                   loginCubit.get(context)!.userLogin(
                                       email: "${emailController.text}",
                                       password: "${passwordController.text}");
+
+                                  // check state then navigate to HomePage
+                                  // if (state is loginStatesSuccess) {
+                                  //   if (state.loginModel?.status == true) {
+                                  //     loginCubit.get(context).navigateTo(context, homePageScreen());
+                                  //   }
+                                  //
+                                  // }
                                 }
                               },
                               child: Text(
@@ -141,7 +154,9 @@ class loginPage extends StatelessWidget {
                           Center(
                             child: TextButton(
                               onPressed: () {
-                                navigateTo(context, registerScreen());
+                                loginCubit
+                                    .get(context)
+                                    .navigateTo(context, registerScreen());
                               },
                               child: Text(
                                 "Register Now!!",
@@ -159,7 +174,37 @@ class loginPage extends StatelessWidget {
                 ),
               ));
         },
-        listener: (context, state) {},
+        listener: (context, state) {
+          // to handle the status of the login true or false?
+          if (state is loginStatesSuccess) {
+            if (state.loginModel?.status == true) {
+              Fluttertoast.showToast(
+                  msg: "${state.loginModel?.message.toString()}",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.green,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
+
+
+            } else {
+              Fluttertoast.showToast(
+                  msg: "${state.loginModel?.message.toString()}",
+                  toastLength: Toast.LENGTH_LONG,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.red,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
+            }
+
+            CacheHelper.saveData(key: "token", value: state.loginModel?.data?.token).then((value) {
+              print("Navigate");
+              loginCubit.get(context).navigateFinish(context, homePageScreen());
+            });
+          }
+        },
       ),
     );
   }

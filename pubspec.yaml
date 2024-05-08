@@ -38,6 +38,7 @@ dependencies:
   flutter_bloc:
   bloc:
   dio:
+  fluttertoast: ^8.2.5
   conditional_builder_null_safety:
   shared_preferences: ^2.2.3
 

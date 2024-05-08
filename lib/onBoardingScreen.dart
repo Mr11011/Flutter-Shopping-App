@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shoppingapp/login/login_page.dart';
+import 'package:shoppingapp/network/cache_helper.dart';
 import 'package:shoppingapp/reusabaleComponents.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -24,6 +25,15 @@ class _onBoardingScreenState extends State<onBoardingScreen> {
 
   bool islAST = false;
 
+  // this method will save shared preferences after skip or navigate from onBoarding screen
+  void saveOnBoardingPreferences() {
+    CacheHelper.saveData(key: "onBoarding", value: true).then((value) {
+      if (value) {
+        navigateTo(context, loginPage());
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +41,7 @@ class _onBoardingScreenState extends State<onBoardingScreen> {
         actions: [
           TextButton(
               onPressed: () {
-                navigateTo(context, loginPage());
+                saveOnBoardingPreferences();
               },
               child: Text(
                 "SKIP",
@@ -78,7 +88,7 @@ class _onBoardingScreenState extends State<onBoardingScreen> {
                     FloatingActionButton(
                         onPressed: () {
                           if (islAST == true) {
-                            navigateFinish(context, loginPage());
+                            saveOnBoardingPreferences();
                           } else {
                             onBoardController.nextPage(
                                 duration: Duration(milliseconds: 600),
