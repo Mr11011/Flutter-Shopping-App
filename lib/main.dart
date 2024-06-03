@@ -38,10 +38,7 @@ void main() async {
   } else {
     widget = onBoardingScreen();
   }
-  // send the onBoarding with runApp to make the app open on the sharedPreference
-  // runApp(MyApp(
-  //   onBoard: onBoarding,
-  // ));
+
 
   runApp(MyApp(
     startingWidget: widget,
