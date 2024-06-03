@@ -119,14 +119,14 @@ Widget OnBoardingItems(onBoardingPagesModel model) => Column(
           height: 25,
         ),
         Text(
-          "${model.title}",
+          "Welcome 👋🚀",
           textAlign: TextAlign.center,
           style: TextStyle(fontFamily: "PoetsenOne-Regular", fontSize: 20),
         ),
         SizedBox(
           height: 25,
         ),
-        Text("${model.body}",
+        Text("Shop smarter, simpler & Find everything you need",
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
         SizedBox(
