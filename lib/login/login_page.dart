@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shoppingapp/homepage/home_page.dart';
-import 'package:shoppingapp/login/cubit/bloc.dart';
+import 'package:shoppingapp/login/cubit/login_cubit.dart';
 import 'package:shoppingapp/login/cubit/states.dart';
 import 'package:shoppingapp/login/login_model.dart';
 import 'package:shoppingapp/network/cache_helper.dart';
@@ -154,9 +154,10 @@ class loginPage extends StatelessWidget {
                           Center(
                             child: TextButton(
                               onPressed: () {
-                                loginCubit
-                                    .get(context)
-                                    .navigateTo(context, registerScreen());
+                                loginCubit.get(context).navigateFinish(context, registerScreen());
+                                // loginCubit
+                                //     .get(context)
+                                //     .navigateTo(context, registerScreen());
                               },
                               child: Text(
                                 "Register Now!!",
@@ -187,7 +188,16 @@ class loginPage extends StatelessWidget {
                   textColor: Colors.white,
                   fontSize: 16.0);
 
-
+              CacheHelper.saveData(
+                      key: "token", value: state.loginModel?.data?.token)
+                  .then((value) {
+                // print("Navigate");
+                print(value);
+                token=value;
+                loginCubit
+                    .get(context)
+                    .navigateFinish(context, homePageScreen());
+              });
             } else {
               Fluttertoast.showToast(
                   msg: "${state.loginModel?.message.toString()}",
@@ -198,11 +208,6 @@ class loginPage extends StatelessWidget {
                   textColor: Colors.white,
                   fontSize: 16.0);
             }
-
-            CacheHelper.saveData(key: "token", value: state.loginModel?.data?.token).then((value) {
-              print("Navigate");
-              loginCubit.get(context).navigateFinish(context, homePageScreen());
-            });
           }
         },
       ),

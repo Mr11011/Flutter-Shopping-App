@@ -24,8 +24,11 @@ class userData {
   int? credit;
   String? token;
 
+
+  //  second constructor
   userData.fromJson(Map<String, dynamic> json) {
     id = json["id"];
+    name = json["name"];
     email = json["email"];
     phone = json["phone"];
     image = json["image"];
